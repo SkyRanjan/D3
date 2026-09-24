@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UST Representative</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="chat">
+
+<header>
+  <div class="brand"><div class="dot"></div><div><h1>UST Representative</h1><small>Enterprise client interface</small></div></div>
+  <div class="hright">
+    <div class="seg" id="modeSeg">
+      <button data-mode="chat" class="active"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-5 4V6a2 2 0 0 1 2-2z"/></svg>Chat</button>
+      <button data-mode="voice"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z"/></svg>Voice</button>
+    </div>
+    <button class="pill" id="recepBtn" title="Visitor and session management">Reception</button>
+  </div>
+</header>
+
+<main>
+  <!-- CHAT -->
+  <section class="chatview">
+    <div class="scroll" id="scroll">
+      <div class="empty" id="empty">
+        <div class="mark">UST</div>
+        <h2>How can I help you today?</h2>
+        <p>I'm your UST representative. Ask about our services, your engagement, or schedule time with your account team.</p>
+        <div class="chips" id="chips">
+          <button>What services does UST offer?</button>
+          <button>Schedule a follow-up</button>
+          <button>Summarize our last discussion</button>
+        </div>
+      </div>
+      <div class="column" id="column"></div>
+    </div>
+    <div class="composer-wrap">
+      <div class="composer">
+        <textarea id="input" rows="1" placeholder="Message UST Representative…"></textarea>
+        <div class="row">
+          <span class="hint">Enter to send · Shift+Enter for new line</span>
+          <div class="actions">
+            <button class="iconbtn" id="micChat" title="Dictate"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z"/></svg></button>
+            <button class="iconbtn send" id="sendBtn" title="Send"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="foot">UST Representative can make mistakes. Please verify important information.</div>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section class="stage">
+    <canvas id="c"></canvas>
+    <div class="status">State · <b id="stateLabel">Idle</b></div>
+    <div class="caption" id="caption"></div>
+    <div class="voicebar">
+      <button class="pill" id="handsfree">Hands-free</button>
+      <button class="mic" id="micMain" title="Click or hold Space to talk"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z"/></svg></button>
+      <button class="pill" id="stopBtn">Stop</button>
+    </div>
+    <div class="hintkey">Hold Space to talk</div>
+  </section>
+</main>
+
+<!-- RECEPTION PANEL (employee-facing: visitor briefing + session control) -->
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel">
+  <div class="panel-head">
+    <h3>Reception Desk</h3>
+    <button class="panel-close" id="panelClose" title="Close">&times;</button>
+  </div>
+  <div class="panel-body">
+    <section class="pgroup">
+      <h4>Session</h4>
+      <div class="sess-status" id="sessStatus">No active session</div>
+      <label for="sessVisitor">Visitor ID</label>
+      <input id="sessVisitor" placeholder="visitor_001" autocomplete="off">
+      <div class="btnrow">
+        <button class="pbtn primary" id="startSess">Start session</button>
+        <button class="pbtn" id="endSess">End session</button>
+      </div>
+    </section>
+    <section class="pgroup">
+      <h4>New visitor briefing</h4>
+      <form id="visitorForm" autocomplete="off">
+        <label for="vf_id">Visitor ID *</label>
+        <input id="vf_id" name="visitor_id" placeholder="visitor_002" required>
+        <label for="vf_name">Name *</label>
+        <input id="vf_name" name="name" placeholder="Full name" required>
+        <label for="vf_org">Organization</label>
+        <input id="vf_org" name="organization" placeholder="Company / institution">
+        <label for="vf_role">Role</label>
+        <input id="vf_role" name="role" placeholder="e.g. CTO, Procurement lead">
+        <label for="vf_meet">Meeting with</label>
+        <input id="vf_meet" name="meeting_with" placeholder="UST host / team">
+        <label for="vf_purpose">Purpose of visit</label>
+        <textarea id="vf_purpose" name="purpose" rows="2" placeholder="Why is the visitor here?"></textarea>
+        <label for="vf_areas">Areas of interest</label>
+        <input id="vf_areas" name="areas_of_interest" placeholder="Comma separated, e.g. AI, cloud migration">
+        <label for="vf_prev">Previous context</label>
+        <textarea id="vf_prev" name="previous_context" rows="3" placeholder="Prior discussions, engagement history…"></textarea>
+        <div class="btnrow">
+          <button class="pbtn primary" type="submit">Create visitor</button>
+          <button class="pbtn" type="reset">Clear</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/speech.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
