@@ -1,11 +1,3 @@
-import os
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent 
-ZSCALER_CERT = BASE_DIR /"certs" / "zscaler-root-ca.cer"
-os.environ["REQUESTS_CA_BUNDLE"]=str(ZSCALER_CERT)
-os.environ["SSL_CERT_FILE"]=str(ZSCALER_CERT)
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 from services.llmservice import LLMService
@@ -14,11 +6,6 @@ from services.visitor_manager import VisitorManager
 from services.cagservice import CAGService
 from services.decisionservice import DecisionService
 from services.responsevalidator import ResponseValidator
-
-import base64
-import urllib.request
-import urllib.error
-import json
 
 app = FastAPI()
 
@@ -72,49 +59,7 @@ def start_session(request: SessionRequest):
         "status": "started"
     }
 
-TTS_URL="http://127.0.0.1:8001/tts"
-def generate_tts_audio(text: str):
-    try:
-        import base64
-        import json
-        import urllib.request
- 
-        tts_url = "http://127.0.0.1:8001/tts"
- 
-        payload = json.dumps({
-            "text": text
-        }).encode("utf-8")
- 
-        request = urllib.request.Request(
-            tts_url,
-            data=payload,
-            headers={
-                "Content-Type": "application/json",
-                "Accept": "audio/wav",
-            },
-            method="POST",
-        )
- 
-        with urllib.request.urlopen(request, timeout=30) as response:
-            audio_bytes = response.read()
- 
-            print(
-                f"TTS audio received: "
-                f"{len(audio_bytes)} bytes, "
-                f"content-type={response.headers.get('Content-Type')}"
-            )
- 
-        # WAV is binary data.
-        # Convert it to Base64 so it can safely be returned inside JSON.
-        audio_base64 = base64.b64encode(audio_bytes).decode("ascii")
- 
-        return audio_base64
- 
-    except Exception as e:
-        print(f"TTS generation failed: {e}")
-        return None
- 
-    
+
 @app.post("/chat")
 def chat(request: ChatRequest):
 
@@ -203,13 +148,10 @@ def chat(request: ChatRequest):
         "assistant",
         response
     )
-    
-    audio = generate_tts_audio(response)
 
     return {
         "response": response,
-        "session_id": current_session_id,
-        "audio": audio
+        "session_id": current_session_id
     }
 
 
