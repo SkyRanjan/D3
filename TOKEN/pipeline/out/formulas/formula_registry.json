@@ -1,0 +1,236 @@
+{
+  "Troubleshooting": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.29869,
+      "b": 39.1285
+    },
+    "expression": "3.2987 * input_tokens + 39.1285",
+    "samples": 3666,
+    "input_range": [
+      3,
+      83
+    ],
+    "cv_metrics": {
+      "r2": 0.6414,
+      "mae": 29.537,
+      "rmse": 40.6356
+    },
+    "notes": []
+  },
+  "Developer": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.78184,
+      "b": 34.5689
+    },
+    "expression": "3.7818 * input_tokens + 34.5689",
+    "samples": 3617,
+    "input_range": [
+      3,
+      83
+    ],
+    "cv_metrics": {
+      "r2": 0.6205,
+      "mae": 34.3351,
+      "rmse": 46.7589
+    },
+    "notes": []
+  },
+  "How-To": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.07525,
+      "b": 27.6279
+    },
+    "expression": "3.0753 * input_tokens + 27.6279",
+    "samples": 2420,
+    "input_range": [
+      5,
+      84
+    ],
+    "cv_metrics": {
+      "r2": 0.6144,
+      "mae": 29.9659,
+      "rmse": 40.3449
+    },
+    "notes": []
+  },
+  "Descriptive": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 2.90756,
+      "b": 42.913
+    },
+    "expression": "2.9076 * input_tokens + 42.9130",
+    "samples": 1918,
+    "input_range": [
+      3,
+      84
+    ],
+    "cv_metrics": {
+      "r2": 0.6199,
+      "mae": 27.9259,
+      "rmse": 38.0595
+    },
+    "notes": []
+  },
+  "Business": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 2.2508,
+      "b": 36.2669
+    },
+    "expression": "2.2508 * input_tokens + 36.2669",
+    "samples": 1617,
+    "input_range": [
+      3,
+      86
+    ],
+    "cv_metrics": {
+      "r2": 0.6091,
+      "mae": 22.3891,
+      "rmse": 30.6586
+    },
+    "notes": []
+  },
+  "Architecture": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 4.66262,
+      "b": 29.5941
+    },
+    "expression": "4.6626 * input_tokens + 29.5941",
+    "samples": 1422,
+    "input_range": [
+      3,
+      84
+    ],
+    "cv_metrics": {
+      "r2": 0.597,
+      "mae": 45.9419,
+      "rmse": 62.3362
+    },
+    "notes": [
+      "sensitive to influential records: refitting without 102 of them (7.2%) moves the estimate at median/P95 input by -3.8%/-10.7%; all records retained"
+    ]
+  },
+  "QA": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 4.03495,
+      "b": 17.6021
+    },
+    "expression": "4.0350 * input_tokens + 17.6021",
+    "samples": 1348,
+    "input_range": [
+      6,
+      83
+    ],
+    "cv_metrics": {
+      "r2": 0.6484,
+      "mae": 36.9394,
+      "rmse": 49.5995
+    },
+    "notes": []
+  },
+  "DevOps-Cloud": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.89552,
+      "b": 29.5709
+    },
+    "expression": "3.8955 * input_tokens + 29.5709",
+    "samples": 1209,
+    "input_range": [
+      3,
+      81
+    ],
+    "cv_metrics": {
+      "r2": 0.6362,
+      "mae": 35.0952,
+      "rmse": 47.8066
+    },
+    "notes": [
+      "sensitive to influential records: refitting without 87 of them (7.2%) moves the estimate at median/P95 input by -2.8%/-11.4%; all records retained"
+    ]
+  },
+  "Data-SQL": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.4248,
+      "b": 22.9474
+    },
+    "expression": "3.4248 * input_tokens + 22.9474",
+    "samples": 1191,
+    "input_range": [
+      5,
+      86
+    ],
+    "cv_metrics": {
+      "r2": 0.65,
+      "mae": 31.2385,
+      "rmse": 42.1281
+    },
+    "notes": []
+  },
+  "Documentation": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.98207,
+      "b": 24.3423
+    },
+    "expression": "3.9821 * input_tokens + 24.3423",
+    "samples": 808,
+    "input_range": [
+      3,
+      84
+    ],
+    "cv_metrics": {
+      "r2": 0.6073,
+      "mae": 41.6866,
+      "rmse": 54.6935
+    },
+    "notes": []
+  },
+  "Analysis-Optimization": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 3.93809,
+      "b": 33.2993
+    },
+    "expression": "3.9381 * input_tokens + 33.2993",
+    "samples": 572,
+    "input_range": [
+      3,
+      80
+    ],
+    "cv_metrics": {
+      "r2": 0.5636,
+      "mae": 39.3339,
+      "rmse": 52.5171
+    },
+    "notes": []
+  },
+  "Communication": {
+    "formula_type": "linear",
+    "parameters": {
+      "a": 1.95905,
+      "b": 31.9685
+    },
+    "expression": "1.9590 * input_tokens + 31.9685",
+    "samples": 212,
+    "input_range": [
+      6,
+      78
+    ],
+    "cv_metrics": {
+      "r2": 0.6483,
+      "mae": 16.9294,
+      "rmse": 22.5505
+    },
+    "notes": [
+      "sensitive to influential records: refitting without 19 of them (9.0%) moves the estimate at median/P95 input by -3.3%/-16.5%; all records retained"
+    ]
+  }
+}
