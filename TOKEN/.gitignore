@@ -1,0 +1,11 @@
+# Python
+.venv/
+__pycache__/
+pipeline/out/
+
+# Node
+node_modules/
+app/dist/
+
+# Source dataset from an external provider - keep it out of the repo unless you may share it
+data/

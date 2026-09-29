@@ -19,7 +19,7 @@ function showTyping() { const el = document.createElement('div'); el.className =
 function setCaption(text, cls) { caption.textContent = text || ''; caption.className = 'caption' + (cls ? ' ' + cls : ''); }
 
 function speakReply(text) {
-  Speech.cancel(); Avatar.setAmpSource(() => Speech.ttsAmp);
+  Avatar.setAmpSource(() => Speech.ttsAmp);
   Speech.speak(text, {
     onStart: () => { Avatar.setState('speaking'); setCaption(text); },
     onEnd: () => { Avatar.setState('idle'); setCaption(''); if (mode === 'voice' && handsfree && !busy) startListening(); }
@@ -153,6 +153,22 @@ visitorForm.onsubmit = async e => {
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); }
 if (window.speechSynthesis) speechSynthesis.getVoices();
 input.focus();
+
+/* ---- voice engine indicator ---- */
+const engineLabel = document.getElementById('engineLabel');
+function showEngine(engine, note) {
+  if (engine === 'xtts') engineLabel.textContent = `Voice · XTTS-v2 (${note})`;
+  else engineLabel.textContent = {
+    checking: 'Voice · Browser', forced: 'Voice · Browser',
+    loading: 'Voice · Browser — neural voice loading…',
+    offline: 'Voice · Browser — neural voice offline',
+    error: 'Voice · Browser — neural voice failed to load',
+  }[note] || 'Voice · Browser';
+  engineLabel.classList.toggle('neural', engine === 'xtts');
+}
+Speech.onEngine = showEngine;
+showEngine(Speech.engine, Speech.engineNote);
+Speech.pollEngine();
 
 /* Health check on load; sessions start lazily on first message or explicitly from the reception panel. */
 API.health().then(() => setOnline(true)).catch(() => { setOnline(false); toast('Backend not reachable — start the FastAPI server'); });

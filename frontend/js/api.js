@@ -1,9 +1,13 @@
-/* Backend communication layer.
-   Endpoints (FastAPI, proxied via /api):
+/* Backend communication layer (all proxied via /api).
+   Chat backend (FastAPI :8000):
      POST /session/start  {visitor_id}  -> {session_id, visitor_id, status}
      POST /chat           {message}     -> {response, session_id} | {error}
      POST /session/end                  -> {session_id, status}
-     POST /tts            (future — TTS engine under development)          */
+     POST /visitor/create {profile}     -> {visitor_id, status}
+   TTS service (XTTS-v2 :8001):
+     GET  /tts/health                   -> {status: loading|ready|error, ...}
+     POST /tts/stream     {text}        -> NDJSON: start, chunk{audio: base64 WAV}..., end
+     POST /tts/cancel                   -> stop in-flight synthesis             */
 const API = (() => {
   let sessionId = null;
   let starting = null;
@@ -76,25 +80,59 @@ const API = (() => {
     sessionId = null;
   }
 
-  // Voice output. The TTS engine backend is still under development; until
-  // CONFIG.TTS_BACKEND_READY is true this returns null and callers fall back
-  // to the browser's speechSynthesis.
-  async function synthesize(text) {
-    if (!CONFIG.TTS_BACKEND_READY) return null;
-    const r = await fetch(CONFIG.API_BASE + '/tts', {
+  // ---- TTS service ----
+  async function ttsHealth() {
+    const r = await fetch(CONFIG.API_BASE + '/tts/health');
+    if (!r.ok) throw new Error(`TTS unreachable (HTTP ${r.status})`);
+    return r.json();
+  }
+
+  function b64ToArrayBuffer(s) {
+    const bin = atob(s), u = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u.buffer;
+  }
+
+  // Resolves true when the stream completes, false if the server cancelled it
+  // (a newer request preempted it). onChunk receives {index, text, audio: ArrayBuffer}.
+  async function ttsStream(text, { signal, onChunk } = {}) {
+    const r = await fetch(CONFIG.API_BASE + '/tts/stream', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text }),
+      signal,
     });
     if (!r.ok) throw new Error(`TTS error (HTTP ${r.status})`);
-    return URL.createObjectURL(await r.blob());
+    const reader = r.body.getReader(), dec = new TextDecoder();
+    let buf = '';
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let nl;
+      while ((nl = buf.indexOf('\n')) >= 0) {
+        const line = buf.slice(0, nl).trim();
+        buf = buf.slice(nl + 1);
+        if (!line) continue;
+        const msg = JSON.parse(line);
+        if (msg.type === 'chunk') onChunk && onChunk({ index: msg.index, text: msg.text, audio: b64ToArrayBuffer(msg.audio) });
+        else if (msg.type === 'end') return true;
+        else if (msg.type === 'cancelled') return false;
+        else if (msg.type === 'error') throw new Error(msg.message);
+      }
+    }
+    throw new Error('TTS stream ended unexpectedly');
+  }
+
+  function ttsCancel() {
+    fetch(CONFIG.API_BASE + '/tts/cancel', { method: 'POST' }).catch(() => {});
   }
 
   window.addEventListener('pagehide', endSession);
 
   return {
     health, startSession, newSession, endSessionNow, createVisitor,
-    sendMessage, endSession, synthesize,
+    sendMessage, endSession, ttsHealth, ttsStream, ttsCancel,
     get sessionId() { return sessionId; },
     get visitorId() { return visitorId; },
   };

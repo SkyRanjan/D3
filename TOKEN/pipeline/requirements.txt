@@ -1,0 +1,5 @@
+numpy>=2.0
+pandas>=2.2
+scikit-learn>=1.5
+tiktoken>=0.8
+truststore>=0.10

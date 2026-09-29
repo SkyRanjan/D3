@@ -1,0 +1,14 @@
+{
+    "Troubleshooting": "3.3110 * input_tokens + 49.5566",
+    "Developer": "3.8537 * input_tokens + 40.5077",
+    "How-To": "3.1025 * input_tokens + 32.7811",
+    "Descriptive": "2.9352 * input_tokens + 53.8459",
+    "Business": "2.3308 * input_tokens + 51.6452",
+    "Architecture": "4.7282 * input_tokens + 38.6198",
+    "QA": "4.0848 * input_tokens + 28.8191",
+    "DevOps-Cloud": "3.9529 * input_tokens + 38.0684",
+    "Data-SQL": "3.4619 * input_tokens + 26.8357",
+    "Documentation": "4.1675 * input_tokens + 35.9274",
+    "Analysis-Optimization": "4.0039 * input_tokens + 44.6457",
+    "Communication": "1.9841 * input_tokens + 38.7861"
+}

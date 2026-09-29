@@ -1,0 +1,3 @@
+# Optional: only for pipeline/calibrate_claude.py (Anthropic's free token-counting endpoint)
+-r requirements.txt
+anthropic>=1.0
